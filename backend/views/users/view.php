@@ -58,6 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $titik_list = $command->queryAll();
 
         $titik = '';
+        $html_titik = '';
         if(count($titik_list)>0){
             $html_titik = '<ul style="padding-left:25px; margin-top:-20px;">';
             foreach ($titik_list as $tkey) {

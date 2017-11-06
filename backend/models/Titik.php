@@ -14,6 +14,8 @@ use Yii;
  * @property string $updated_at
  *
  * @property Area $area
+ * @property TitikAssignment[] $titikAssignments
+ * @property User[] $niks
  */
 class Titik extends \yii\db\ActiveRecord
 {
@@ -32,8 +34,9 @@ class Titik extends \yii\db\ActiveRecord
     {
         return [
             [['titik_id', 'area_id'], 'required'],
-            [['created_at', 'updated_at','hor_id'], 'safe'],
-            [['titik_id', 'area_id'], 'string', 'max' => 4],
+            [['created_at', 'updated_at'], 'safe'],
+            [['titik_id'], 'string', 'max' => 6],
+            [['area_id'], 'string', 'max' => 4],
             [['titik_name'], 'string', 'max' => 70],
             [['titik_id'], 'unique'],
             [['area_id'], 'exist', 'skipOnError' => true, 'targetClass' => Area::className(), 'targetAttribute' => ['area_id' => 'area_id']],
@@ -47,7 +50,6 @@ class Titik extends \yii\db\ActiveRecord
     {
         return [
             'titik_id' => 'Titik ID',
-            'hor_id' => 'HOR ID',
             'area_id' => 'Area ID',
             'titik_name' => 'Titik Name',
             'created_at' => 'Created At',
@@ -62,8 +64,20 @@ class Titik extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Area::className(), ['area_id' => 'area_id']);
     }
-    public function getHor()
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTitikAssignments()
     {
-        return $this->hasOne(Area::className(), ['hor_id' => 'hor_id']);
+        return $this->hasMany(TitikAssignment::className(), ['titik_id' => 'titik_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNiks()
+    {
+        return $this->hasMany(User::className(), ['nik' => 'nik'])->viaTable('titik_assignment', ['titik_id' => 'titik_id']);
     }
 }

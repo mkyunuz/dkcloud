@@ -34,7 +34,7 @@ class TitikAssignment extends \yii\db\ActiveRecord
             [['nik', 'titik_id'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['nik'], 'string', 'max' => 9],
-            [['titik_id'], 'string', 'max' => 4],
+            [['titik_id'], 'string', 'max' => 6],
             [['nik'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['nik' => 'nik']],
             [['titik_id'], 'exist', 'skipOnError' => true, 'targetClass' => Titik::className(), 'targetAttribute' => ['titik_id' => 'titik_id']],
         ];
