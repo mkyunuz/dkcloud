@@ -8,7 +8,7 @@ use backend\models\TitikAssignment;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Users */
 
-$this->title = $model->id;
+$this->title = $model->nik;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Point Assigmnet', ['point-assignment', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

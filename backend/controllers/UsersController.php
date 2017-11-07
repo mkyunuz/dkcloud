@@ -72,7 +72,17 @@ class UsersController extends Controller
                     $newModel->titik_id = $value;
                     $newModel->nik =  $userModel->nik;
                     $newModel->created_at =  date('Y-m-d H:i:s');
-                    $newModel->save();
+                    // $newModel->save();
+                    if($newModel->save()){
+                        $UserAssignment = TitikAssignment::find()->where(['nik'=> $userModel->nik])->all();
+                        if(count($UserAssignment)>0){
+                            foreach ($UserAssignment as $key) {
+                                $data = ['titik_id'=> $key->titik_id ,'nik'=> $userModel->nik];
+                                $modelDir = new FileDir;
+                                $modelDir->generateUserDir($data);
+                            }
+                        }
+                    }
                 }
                
                 Yii::$app->session->setFlash('success', 'Data berhasi diperbaruhi.');
@@ -128,10 +138,27 @@ class UsersController extends Controller
         }
     }
 
-    public function actionCreateUserDir(){
-        $data = ['titik_id'=>'10602','id'=>'4'];
-        $modelDir = new FileDir;
-        $modelDir->generateUserDir($data);
+    public function actionCreateUserDir($nik){
+       
+        $UserAssignment = TitikAssignment::find()->where(['nik'=>$nik])->all();
+        if(count($UserAssignment)>0){
+            foreach ($UserAssignment as $key) {
+                $data = ['titik_id'=> $key->titik_id ,'nik'=>$nik];
+                $modelDir = new FileDir;
+                $modelDir->generateUserDir($data);
+            }
+        }
+
+        $model = new Users;
+        $id = $model->find()->where(['nik'=>$nik])->one();
+        return $this->render('view', [
+            'model' => $id,
+        ]);
+            
+           
+           
+       
+       
     }
     /**
      * Updates an existing Users model.
@@ -175,6 +202,14 @@ class UsersController extends Controller
     protected function findModel($id)
     {
         if (($model = Users::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    protected function findModelNik($nik)
+    {
+        if (($model = Users::findOne($nik)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

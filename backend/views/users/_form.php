@@ -49,7 +49,7 @@ use backend\models\Users;
 
     ?>
 
-    <?= $form->field($model, 'password_hash')->passwordInput(['maxlength' => true,'value'=>'Deka2017']) ?>
+    <?= $form->field($model, 'password_hash')->hiddenInput(['maxlength' => true,'value'=>'Deka2017'])->label(false) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
