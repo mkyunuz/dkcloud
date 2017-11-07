@@ -6,8 +6,8 @@ use yii\helpers\ArrayHelper;
 
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
-
 use backend\models\Jabatan;
+use backend\models\Users;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\User */
@@ -34,9 +34,7 @@ use backend\models\Jabatan;
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
 
-   <!--  <?= $form->field($model, 'tanggal_masuk')->textInput() ?> -->
-
-     <?= $form->field($model, 'tanggal_masuk')->widget(
+    <?= $form->field($model, 'tanggal_masuk')->widget(
 
                                     DatePicker::className(),[
                                         'value' => date('Y-m-d'),
@@ -51,7 +49,7 @@ use backend\models\Jabatan;
 
     ?>
 
-    <?= $form->field($model, 'password_hash')->passwordInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'password_hash')->passwordInput(['maxlength' => true,'value'=>'Deka2017']) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
@@ -59,7 +57,23 @@ use backend\models\Jabatan;
 
     <?= $form->field($model, 'status')->dropDownList([ '10' => 'Active', '-1' => 'In Active' ], ['prompt' => '']) ?>
 
+    <?php
+        // $connection = Yii::$app->getDb();
+        // $command = $connection->createCommand('select hor.hor_name, area.area_name, titik.titik_name from titik 
+        //                                         JOIN area ON titik.area_id=area.area_id
+        //                                         JOIN hor ON hor.hor_id=area.hor_id');
+        // $user = $command->queryAll();
+        $user_list = ArrayHelper::map(Users::find()->all(), 'id','nama');
+        echo $form->field($model, 'parent')->widget(Select2::classname(), [
+                'data' => $user_list,
+                'language' => 'en',
+                'options' => ['placeholder' => 'Select Parent'],
+                'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+            ]);
 
+    ?>
     <?= $form->field($model, 'photo')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'no_telp')->textInput() ?>

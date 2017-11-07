@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Users;
 use backend\models\UsersSearch;
 use backend\models\TitikAssignment;
+use common\models\FileDir;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -127,6 +128,11 @@ class UsersController extends Controller
         }
     }
 
+    public function actionCreateUserDir(){
+        $data = ['titik_id'=>'10602','id'=>'4'];
+        $modelDir = new FileDir;
+        $modelDir->generateUserDir($data);
+    }
     /**
      * Updates an existing Users model.
      * If update is successful, the browser will be redirected to the 'view' page.

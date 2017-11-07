@@ -8,6 +8,8 @@ use backend\models\TitikSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\FileDir;
+use yii\helpers\FileHelper;
 
 /**
  * TitikController implements the CRUD actions for Titik model.
@@ -96,7 +98,22 @@ class TitikController extends Controller
 
 
     public function actionCreateFolder(){
-        $
+        $DirModel = new FileDir;
+        $default_path = $DirModel->default_path();
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand('select hor.hor_name, area.area_name, titik.titik_name from titik 
+                                                JOIN area ON titik.area_id=area.area_id
+                                                JOIN hor ON hor.hor_id=area.hor_id');
+        $result = $command->queryAll();
+        foreach ($result as $key) {
+            $path = $key['hor_name'].DIRECTORY_SEPARATOR.$key['area_name'].DIRECTORY_SEPARATOR.$key['titik_name'];
+            if (!file_exists( $default_path.$path)) {
+                $final_path = $default_path.$path;
+                FileHelper::createDirectory($final_path, 0775, true);
+            }
+        }
+
     }
 
     /**
